@@ -5,12 +5,18 @@
 //-------------------------------------------------------------------------
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace Full_GRASP_And_SOLID
 {
     public class Recipe : IRecipeContent // Modificado por DIP
     {
+        public Recipe()
+        {
+            this.Cooked = false;
+            this.StartCountdown();
+        }
         // Cambiado por OCP
         private IList<BaseStep> steps = new List<BaseStep>();
 
@@ -61,6 +67,55 @@ namespace Full_GRASP_And_SOLID
             }
 
             return result;
+        }
+
+        public void Cook()
+        {
+            this.Cooked = true;
+        }
+        public int GetCookTime()
+        {
+            int time = 0;
+            foreach (BaseStep step in this.steps)
+            {
+                time += step.Time;
+            }
+            return time;
+        }
+
+        // Agregado por ISP
+        public void TimeOut()
+        {
+            Cook();
+        }
+
+        // agregada por adapter
+        private void StartCountdown()
+        {
+            this.timerClient = new TimerAdapter(this);
+            this.timer.Register(GetCookTime(), this.timerClient);
+        }
+
+        private CountdownTimer timer = new CountdownTimer();
+        private TimerAdapter timerClient;
+        public bool Cooked { get; set; }
+
+        // creada por patron adapter. Recipe ya no implementa la interfaz TimerClient
+        private class TimerAdapter : TimerClient
+        {
+            private Recipe Recipe;
+
+            public TimerAdapter(Recipe recipe)
+            {
+                this.Recipe = recipe;
+            }
+
+            public object TimeOutId { get; }
+
+            public void TimeOut()
+            {
+                this.Recipe.Cook();
+            }
         }
     }
 }
