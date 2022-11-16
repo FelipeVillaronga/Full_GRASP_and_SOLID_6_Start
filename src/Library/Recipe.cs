@@ -71,7 +71,16 @@ namespace Full_GRASP_And_SOLID
 
         public void Cook()
         {
-            this.Cooked = true;
+            if(this.Cooked)
+            {
+                InvalidOperationException e= new InvalidOperationException("Ya está cocido.");
+                throw e;
+            }
+            else
+            {
+                this.Cooked = true;
+            }
+            
         }
         public int GetCookTime()
         {
@@ -98,8 +107,8 @@ namespace Full_GRASP_And_SOLID
 
         private CountdownTimer timer = new CountdownTimer();
         private TimerAdapter timerClient;
-        public bool Cooked { get; set; }
-
+        public bool Cooked { get; private set; }
+        
         // creada por patron adapter. Recipe ya no implementa la interfaz TimerClient
         private class TimerAdapter : TimerClient
         {
