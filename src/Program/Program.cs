@@ -35,7 +35,7 @@ namespace Full_GRASP_And_SOLID
 
             Console.WriteLine($"Cooked: {recipe.Cooked}");
             recipe.Cook();
-            Thread.Sleep(500); // 0.5 segundos
+            Thread.Sleep(500);
             Console.WriteLine($"Cooked: {recipe.Cooked}");
         }
 

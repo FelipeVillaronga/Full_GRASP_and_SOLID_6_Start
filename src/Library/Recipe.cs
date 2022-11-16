@@ -15,7 +15,6 @@ namespace Full_GRASP_And_SOLID
         public Recipe()
         {
             this.Cooked = false;
-            this.StartCountdown();
         }
         // Cambiado por OCP
         private IList<BaseStep> steps = new List<BaseStep>();
@@ -73,13 +72,10 @@ namespace Full_GRASP_And_SOLID
         {
             if(this.Cooked)
             {
-                InvalidOperationException e= new InvalidOperationException("Ya está cocido.");
-                throw e;
+                InvalidOperationException exception= new InvalidOperationException("Ya está cocido.");
+                throw exception;
             }
-            else
-            {
-                this.Cooked = true;
-            }
+            this.StartCountdown();
             
         }
         public int GetCookTime()
@@ -123,7 +119,7 @@ namespace Full_GRASP_And_SOLID
 
             public void TimeOut()
             {
-                this.Recipe.Cook();
+                this.Recipe.Cooked= true;
             }
         }
     }
